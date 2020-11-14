@@ -1,0 +1,59 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:${property('serenity.version')}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'net.serenity-bdd.aggregator'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    jcenter()
+}
+
+dependencies {
+    implementation "net.serenity-bdd:serenity-rest-assured:${property('serenity.version')}"
+    implementation "net.serenity-bdd:serenity-core:${property('serenity.version')}"
+    implementation "net.serenity-bdd:serenity-cucumber:${property('cucumber.version')}"
+    implementation "org.json:json:20190722"
+    testCompile('org.assertj:assertj-core:1.7.0')
+    testCompile('org.slf4j:slf4j-simple:1.7.21')
+}
+
+
+// Allow build to continue on test failure
+gradle.startParameter.continueOnFailure = true
+
+test {
+    systemProperties System.getProperties()
+    /* Show Serenity execution details: */
+    test.testLogging.showStandardStreams = true
+    /* Configuring Serenity reporting: */
+    test.reports.getHtml().enabled = false
+    test.reports.junitXml.enabled= false
+    /* Setting the desired Test Runner for the task: */
+    include 'com/basf/challenge/tests/web/testRunners/TestRunner.class'
+}
+
+//[browserstack] To configure BrowserStack custom driver a different Test Runner is needed. This task points to this specific runner.
+task testBrowserStack(type: Test) {
+    systemProperties System.getProperties()
+    /* Show Serenity execution details: */
+    testLogging.showStandardStreams = true
+    /* Configuring Serenity reporting: */
+    reports.getHtml().enabled = false
+    reports.junitXml.enabled= false
+    /* Setting the desired Test Runner for the task: */
+    include 'com/basf/challenge/tests/web/testRunners/TestRunnerBrowserStack.class'
+}
+
+test.reports.getHtml().enabled = false
+test.reports.junitXml.enabled =false
