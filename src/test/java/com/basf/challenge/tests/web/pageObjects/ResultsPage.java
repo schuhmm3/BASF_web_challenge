@@ -15,7 +15,8 @@ public class ResultsPage extends BasePage {
 
     public void clickinRowTitle(int rowNumber) {
         verifyCurrentURL(url);
-
+// OPEN bug https://bugzilla.mozilla.org/show_bug.cgi?id=1374283 "ElementNotInteractableException: Element could not be scrolled into view"
+// Tested with latest version of firefox 82.0.3 (64-bit) and geckodriver 0.27.0
         final By byRowTitle = getDynamicXpath(XPATH_ROW_TITLE, "@ROW_NUMBER@", Integer.toString(rowNumber));
         waitAndClick(byRowTitle);
 // Workaround: Sometimes after clicking title cursor hovers to Persons and the popup avoid clicking in next row title
